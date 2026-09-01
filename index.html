@@ -5,49 +5,59 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#090d0b">
   <title>HERACLES FFMI 计算器</title>
-  <meta name="description" content="计算 FFMI、标准化 FFMI、去脂体重与身体组成参考数据。">
+  <meta name="description" content="计算 FFMI、标准化 FFMI 与身体组成参考数据。">
   <style>
-    :root{color-scheme:dark;--bg:#090d0b;--panel:#111714;--panel2:#0d120f;--line:#28322c;--text:#f6f8f6;--muted:#8e9b93;--green:#b8f83d;--warn:#ffc95c}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 5%,#1b2a19 0,transparent 28%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input{font:inherit}.shell{width:min(100%,920px);margin:auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(36px + env(safe-area-inset-bottom))}
-    .topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:13px;letter-spacing:1.3px}.mark{display:grid;place-items:center;width:30px;height:30px;background:var(--green);color:#10150f;border-radius:9px;font-size:17px}.tag{padding:7px 10px;border:1px solid var(--line);border-radius:9px;color:var(--muted);font-size:10px;font-weight:800}
-    .hero{padding:28px 3px 22px}.eyebrow,.step{margin:0 0 7px;color:var(--green);font-size:10px;font-weight:800;letter-spacing:2px}.hero h1{margin:0;font-size:clamp(42px,10vw,68px);line-height:.98;letter-spacing:-3px}.hero h1 span{color:var(--green)}.hero>p:last-child{margin:10px 0 0;color:var(--muted);font-size:13px}
-    .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:14px}.card{background:linear-gradient(145deg,rgba(25,34,29,.98),rgba(14,19,16,.98));border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.2);padding:20px}.head{display:flex;align-items:start;justify-content:space-between;margin-bottom:20px}.head h2{margin:0;font-size:21px}.metric,.level{padding:6px 9px;border:1px solid var(--line);border-radius:8px;color:var(--muted);font-size:10px;font-weight:800}.level{background:var(--green);border-color:var(--green);color:#10150f}
-    .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:8px;color:#b1bbb4;font-size:12px;font-weight:750}.wide{grid-column:1/-1}.input{height:55px;display:flex;align-items:center;border:1px solid var(--line);border-radius:13px;background:var(--panel2);overflow:hidden}.input:focus-within{border-color:var(--green);box-shadow:0 0 0 3px #b8f83d18}.input input{min-width:0;width:100%;height:100%;border:0;outline:0;background:transparent;color:var(--text);padding:0 13px;font-size:23px;font-weight:850}.input b{padding:0 13px;color:var(--muted);font-size:11px}.field small{color:#6f7c74;font-weight:400;line-height:1.5}.error{display:none;margin:12px 0 0;color:#ff8c7a;font-size:11px;line-height:1.5}.actions{display:flex;gap:9px;margin-top:20px}.primary,.secondary{height:48px;border:0;border-radius:12px;font-weight:850;cursor:pointer}.primary{flex:1;background:var(--green);color:#10150f}.secondary{padding:0 17px;background:#1a211d;border:1px solid var(--line);color:#a9b4ad}.primary:active,.secondary:active{transform:scale(.985)}
-    .score-label{margin:2px 0 6px;color:var(--muted);font-size:12px}.score-row{display:flex;align-items:center;justify-content:space-between}.score{color:var(--green);font-size:64px;line-height:1;font-weight:900;letter-spacing:-5px}.score small{margin-left:7px;color:#66736b;font-size:12px;letter-spacing:0}.ring{--score:180deg;width:78px;aspect-ratio:1;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle,#121914 58%,transparent 60%),conic-gradient(var(--green) 0 var(--score),#2a332e var(--score) 360deg)}.ring strong{font-size:17px}.ring span{color:var(--muted);font-size:9px}.scale{margin:22px 0}.bar{position:relative;height:8px;border-radius:99px;background:linear-gradient(90deg,#667887,#28a17b 35%,#b8f83d 65%,#f4bd32 82%,#ff6755)}.needle{position:absolute;left:50%;top:50%;width:16px;height:16px;border:3px solid #10150f;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 0 2px #fff;transition:left .3s}.ticks{display:flex;justify-content:space-between;margin-top:7px;color:#657168;font-size:9px}.note{min-height:42px;color:#aab4ad;font-size:12px;line-height:1.65}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}.stats div{display:grid;gap:4px}.stats span{color:var(--muted);font-size:9px}.stats strong{font-size:15px}
-    .truth{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-top:14px;padding:19px;border:1px solid #5a4c25;border-radius:17px;background:#171813}.truth-icon{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--warn);border-radius:50%;color:var(--warn);font-weight:900}.truth .step{color:var(--warn)}.truth h2{margin:0 0 7px;font-size:16px}.truth p:last-child{margin:0;color:#a5aaa3;font-size:12px;line-height:1.7}.reference{margin-top:14px}.ranges{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.ranges div{padding:12px 9px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}.ranges i{display:block;width:20px;height:3px;margin-bottom:7px;border-radius:3px}.ranges span,.ranges b{display:block}.ranges span{color:var(--muted);font-size:9px}.ranges b{margin-top:3px;font-size:12px}.formula{margin:16px 0 0;color:#66736b;font-size:10px;line-height:1.7}footer{padding-top:26px;text-align:center;color:#4f5b53;font-size:9px;letter-spacing:1.2px}
-    .c1{background:#667887}.c2{background:#28a17b}.c3{background:#64ce46}.c4{background:#b8f83d}.c5{background:#f4bd32}.c6{background:#ff6755}
-    @media(max-width:720px){.shell{padding-left:14px;padding-right:14px}.hero{padding-top:23px}.grid{grid-template-columns:1fr}.score{font-size:58px}.ranges{grid-template-columns:repeat(3,1fr)}}@media(max-width:390px){.fields{grid-template-columns:1fr}.wide{grid-column:auto}.score{font-size:51px}.stats strong{font-size:13px}}button:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+    :root{color-scheme:dark;--bg:#090d0b;--panel:#111714;--line:#28322c;--text:#f6f8f6;--muted:#8e9b93;--green:#b8f83d}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input{font:inherit}button{-webkit-tap-highlight-color:transparent}
+    .app-shell{width:min(1120px,100%);margin:0 auto;padding:28px 24px 48px}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:13px;letter-spacing:1.3px}.mark{display:grid;place-items:center;width:30px;height:30px;background:var(--green);color:#10150f;border-radius:9px;font-size:17px}.version{color:var(--muted);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:11px;font-weight:800}.hero{padding:28px 3px 24px}.eyebrow,.step{margin:0;color:var(--green);font-size:11px;font-weight:800;letter-spacing:.16em}.hero h1{margin:6px 0 0;font-size:clamp(38px,7vw,58px);line-height:.98;letter-spacing:-3px}.hero h1 span{color:var(--green)}.hero>p:last-child{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+    .tool-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px;align-items:stretch}.panel{border:1px solid var(--line);background:linear-gradient(145deg,var(--panel),#0a151f);border-radius:22px;padding:25px;box-shadow:0 18px 60px #00000025}.section-heading{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:26px}.section-heading h2{margin:7px 0 0;font-size:22px;letter-spacing:-.03em}.metric-tag,.result-level{color:#aab7c0;background:#111f2a;border:1px solid #293b49;border-radius:8px;font-size:12px;padding:7px 10px}.result-level{color:#071019;background:var(--green);border-color:var(--green);font-weight:900}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:8px;color:#aab6bf;font-size:13px;font-weight:700}.field-wide{grid-column:1/-1}.field small{color:#687b89;font-weight:400;line-height:1.5}.input-wrap{height:58px;display:flex;align-items:center;background:#07121b;border:1px solid #29404f;border-radius:12px;overflow:hidden;transition:.2s}.input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px #93f00015}.input-wrap input{min-width:0;width:100%;height:100%;border:0;outline:0;background:transparent;color:#fff;font-size:23px;font-weight:750;padding:0 14px}.input-wrap b{color:#738895;padding:0 14px;font-size:13px}.error{display:none;color:#ff8d79;font-size:12px;margin:14px 0 0;line-height:1.5}.actions{display:flex;gap:10px;margin-top:24px}.primary-button,.ghost-button{border:0;border-radius:12px;height:50px;cursor:pointer;font-weight:850;transition:transform .15s,filter .15s}.primary-button:active,.ghost-button:active{transform:scale(.98)}.primary-button{flex:1;background:var(--green);color:#071019;padding:0 20px;display:flex;justify-content:space-between;align-items:center}.primary-button:hover{filter:brightness(1.06)}.ghost-button{padding:0 18px;color:#a8b5be;background:#14222d;border:1px solid #253746}
+    .score-row{display:flex;justify-content:space-between;align-items:center;margin:4px 0 20px}.score-label{margin:0 0 6px;color:#91a1ac;font-size:13px}.score{color:var(--green);font-size:62px;line-height:1;font-weight:900;letter-spacing:-.07em;font-variant-numeric:tabular-nums}.score span:last-child{margin-left:8px;color:#637583;font-size:14px;letter-spacing:0;font-weight:700}.mini-ring{--score:180deg;width:82px;aspect-ratio:1;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle at center,#0c1822 58%,transparent 60%),conic-gradient(var(--green) 0 var(--score),#21313d var(--score) 360deg)}.mini-ring span{font-size:18px;font-weight:850}.mini-ring small{color:#6d808e;font-size:10px}.scale{margin:0 0 20px}.scale-bar{height:9px;position:relative;border-radius:99px;background:linear-gradient(90deg,#4e6576 0 28%,#31bf8c 48%,#93f000 68%,#f4bd32 82%,#ff6755 100%)}.scale-bar i{position:absolute;top:50%;width:17px;height:17px;border:3px solid #061019;border-radius:50%;background:white;transform:translate(-50%,-50%);box-shadow:0 0 0 2px white;transition:left .35s ease}.scale-labels{display:flex;justify-content:space-between;color:#657987;margin-top:8px;font-size:10px}.result-note{min-height:45px;color:#aab8c1;font-size:13px;line-height:1.65;margin:0 0 20px}.result-note strong{color:#fff}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);padding-top:20px;gap:10px}.stat-grid div{display:grid;gap:5px}.stat-grid span{color:#6f8290;font-size:11px}.stat-grid strong{font-size:17px;font-variant-numeric:tabular-nums}
+    .truth-card{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:flex-start;margin:18px 0;border:1px solid #4a4128;background:linear-gradient(115deg,#171b1a,#161a1f);border-radius:18px;padding:22px 24px}.truth-icon{width:34px;height:34px;border:1px solid #f5c64b;color:#f5c64b;border-radius:50%;display:grid;place-items:center;font-weight:900}.truth-card .step{color:#f5c64b}.truth-card h2{font-size:17px;margin:6px 0 8px}.truth-card p:last-child{color:#96a4ad;font-size:13px;line-height:1.7;margin:0}
+    .reference{box-shadow:none}.reference-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.reference-row div{min-width:0;background:#0a151e;border:1px solid #1d303d;border-radius:11px;padding:13px 10px;display:grid;gap:4px}.reference-row i{width:22px;height:3px;border-radius:5px;margin-bottom:5px}.reference-row span{color:#82939f;font-size:11px}.reference-row b{font-size:13px}.tone-1{background:#667887}.tone-2{background:#28a17b}.tone-3{background:#64ce46}.tone-4{background:#93f000}.tone-5{background:#f4bd32}.tone-6{background:#ff6755}.formula{margin:18px 0 0;color:#647987;font-size:11px;line-height:1.7}footer{color:#536875;text-align:center;font-size:10px;letter-spacing:.1em;padding-top:26px}
+    @media(max-width:760px){.app-shell{padding:18px 14px 36px}.hero{padding:23px 3px 18px}.hero h1{font-size:46px}.tool-grid{grid-template-columns:1fr;gap:12px}.panel{border-radius:17px;padding:20px}.section-heading{margin-bottom:20px}.section-heading h2{font-size:19px}.field-grid{gap:12px}.input-wrap{height:54px}.score{font-size:55px}.mini-ring{width:72px}.truth-card{padding:18px;gap:13px}.truth-card h2{font-size:15px;line-height:1.4}.reference-row{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:390px){.field-grid{grid-template-columns:1fr}.field-wide{grid-column:auto}.score{font-size:49px}.stat-grid strong{font-size:15px}}
   </style>
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar"><div class="brand"><span class="mark">H</span><span>HERACLES LAB</span></div><span class="tag">FFMI</span></header>
-    <section class="hero"><p class="eyebrow">HERACLES PHYSIQUE TOOLKIT</p><h1>FFMI <span>计算器</span></h1><p>体型评估 · 标准化 FFMI · 去脂体重</p></section>
-    <section class="grid">
-      <div class="card">
-        <div class="head"><div><p class="step">01 / 输入数据</p><h2>身体数据</h2></div><span class="metric">公制</span></div>
-        <div class="fields">
-          <label class="field">身高<div class="input"><input id="height" type="number" inputmode="decimal" min="100" max="230" value="175"><b>cm</b></div></label>
-          <label class="field">体重<div class="input"><input id="weight" type="number" inputmode="decimal" min="30" max="300" step="0.1" value="75"><b>kg</b></div></label>
-          <label class="field wide">体脂率<div class="input"><input id="bodyFat" type="number" inputmode="decimal" min="2" max="60" step="0.1" value="15"><b>%</b></div><small>建议使用同一台设备、同一时段的数据进行长期对比。</small></label>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="mark" aria-hidden="true">H</span><span>HERACLES LAB</span></div>
+      <span class="version">FFMI</span>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">HERACLES STRENGTH TOOLKIT</p>
+      <h1>FFMI <span>计算器</span></h1>
+      <p>体型评估 · 标准化 FFMI · 去脂体重</p>
+    </section>
+    <section class="tool-grid">
+      <div class="input-panel panel">
+        <div class="section-heading"><div><p class="step">01 / 输入数据</p><h2>身体数据</h2></div><span class="metric-tag">公制</span></div>
+        <div class="field-grid">
+          <label class="field"><span>身高</span><div class="input-wrap"><input id="height" aria-label="身高" inputmode="decimal" type="number" min="100" max="230" value="175"><b>cm</b></div></label>
+          <label class="field"><span>体重</span><div class="input-wrap"><input id="weight" aria-label="体重" inputmode="decimal" type="number" min="30" max="300" step="0.1" value="75"><b>kg</b></div></label>
+          <label class="field field-wide"><span>体脂率</span><div class="input-wrap"><input id="bodyFat" aria-label="体脂率" inputmode="decimal" type="number" min="2" max="60" step="0.1" value="15"><b>%</b></div><small>建议使用同一台设备、同一时段的数据进行长期对比。</small></label>
         </div>
-        <p class="error" id="error">请检查输入：身高 100–230 cm，体重 30–300 kg，体脂率 2–60%。</p>
-        <div class="actions"><button class="primary" id="calculate">计算 FFMI　→</button><button class="secondary" id="reset">重置</button></div>
+        <p class="error" id="error" role="alert">请检查输入：身高 100–230 cm，体重 30–300 kg，体脂率 2–60%。</p>
+        <div class="actions"><button class="primary-button" id="calculate">计算 FFMI <span>→</span></button><button class="ghost-button" id="reset">重置</button></div>
       </div>
-      <div class="card" aria-live="polite">
-        <div class="head"><div><p class="step">02 / 评估结果</p><h2>你的肌肉量水平</h2></div><span class="level" id="level">良好</span></div>
-        <div class="score-row"><div><p class="score-label">标准化 FFMI</p><div class="score"><span id="normalized">21.0</span><small>/ 25</small></div></div><div class="ring" id="ring"><strong id="raw">20.8</strong><span>原始</span></div></div>
-        <div class="scale"><div class="bar"><i class="needle" id="needle"></i></div><div class="ticks"><span>14</span><span>18</span><span>22</span><span>25</span><span>28+</span></div></div>
-        <p class="note" id="note"><b>良好：</b>已有较明显的肌肉量基础。</p>
-        <div class="stats"><div><span>去脂体重</span><strong id="lean">63.8 kg</strong></div><div><span>脂肪重量</span><strong id="fat">11.3 kg</strong></div><div><span>BMI</span><strong id="bmi">24.5</strong></div></div>
+      <div class="result-panel panel" aria-live="polite">
+        <div class="section-heading"><div><p class="step">02 / 评估结果</p><h2>你的肌肉量水平</h2></div><span class="result-level" id="level">良好</span></div>
+        <div class="score-row"><div><p class="score-label">标准化 FFMI</p><div class="score"><span id="normalized">21.0</span><span>/ 25</span></div></div><div class="mini-ring" id="ring"><span id="raw">20.8</span><small>原始</small></div></div>
+        <div class="scale" aria-label="FFMI 等级刻度"><div class="scale-bar"><i id="needle"></i></div><div class="scale-labels"><span>14</span><span>18</span><span>22</span><span>25</span><span>28+</span></div></div>
+        <p class="result-note" id="note"><strong>良好：</strong>已有较明显的肌肉量基础。</p>
+        <div class="stat-grid"><div><span>去脂体重</span><strong id="lean">63.8 kg</strong></div><div><span>脂肪重量</span><strong id="fat">11.3 kg</strong></div><div><span>BMI</span><strong id="bmi">24.5</strong></div></div>
       </div>
     </section>
-    <section class="truth"><div class="truth-icon">!</div><div><p class="step">关于“是否自然”</p><h2>FFMI 不能判定一个人是否使用药物</h2><p>“FFMI 25”只是特定样本中的经验参考线，不是生理极限或药检标准。身高、种族、骨架、体脂测量误差和训练年限都会影响结果。超过 25 只能说明数值很高，不能据此断言“不自然”。</p></div></section>
-    <section class="card reference"><div class="head"><div><p class="step">03 / 参考区间</p><h2>标准化 FFMI 对照</h2></div></div><div class="ranges"><div><i class="c1"></i><span>&lt; 18</span><b>偏低</b></div><div><i class="c2"></i><span>18–20</span><b>普通</b></div><div><i class="c3"></i><span>20–22</span><b>良好</b></div><div><i class="c4"></i><span>22–23</span><b>优秀</b></div><div><i class="c5"></i><span>23–25</span><b>精英</b></div><div><i class="c6"></i><span>≥ 25</span><b>极高</b></div></div><p class="formula">FFMI = 去脂体重 ÷ 身高²　·　标准化 FFMI = FFMI + 6.1 ×（1.8 − 身高）</p></section>
-    <footer>HERACLES LAB · 数据仅用于健身参考，不构成医学判断</footer>
+    <section class="truth-card"><div class="truth-icon">!</div><div><p class="step">关于“是否自然”</p><h2>FFMI 不能判定一个人是否使用药物</h2><p>“FFMI 25”只是来自特定样本的经验参考线，不是生理极限或药检标准。身高、种族、骨架、体脂测量误差和训练年限都会影响结果。超过 25 只能说明数值很高，不能据此断言“不自然”。</p></div></section>
+    <section class="reference panel">
+      <div class="section-heading"><div><p class="step">03 / 参考区间</p><h2>标准化 FFMI 对照</h2></div></div>
+      <div class="reference-row"><div><i class="tone-1"></i><span>&lt; 18</span><b>偏低</b></div><div><i class="tone-2"></i><span>18–20</span><b>普通</b></div><div><i class="tone-3"></i><span>20–22</span><b>良好</b></div><div><i class="tone-4"></i><span>22–23</span><b>优秀</b></div><div><i class="tone-5"></i><span>23–25</span><b>精英</b></div><div><i class="tone-6"></i><span>≥ 25</span><b>极高</b></div></div>
+      <p class="formula">FFMI = 去脂体重 ÷ 身高²　·　标准化 FFMI = FFMI + 6.1 ×（1.8 − 身高）</p>
+    </section>
+    <footer>HERACLES TOOLS · 数据仅用于健身参考，不构成医学判断</footer>
   </main>
   <script>
-    const $=id=>document.getElementById(id);
     const levels=[
       {max:18,label:"偏低",note:"去脂体重相对身高偏低。"},
       {max:20,label:"普通",note:"处于常见成年男性范围。"},
@@ -56,20 +66,24 @@
       {max:25,label:"精英",note:"接近传统研究中的高水平自然训练区间。"},
       {max:Infinity,label:"极高",note:"超过传统 FFMI 25 参考线，但这不是用药证据。"}
     ];
-    function run(){
-      const h=Number($("height").value),w=Number($("weight").value),bf=Number($("bodyFat").value);
-      if(!Number.isFinite(h)||!Number.isFinite(w)||!Number.isFinite(bf)||h<100||h>230||w<30||w>300||bf<2||bf>60){$("error").style.display="block";return}
+    const $=id=>document.getElementById(id);
+    function calculate(){
+      const heightCm=Number($("height").value),weightKg=Number($("weight").value),bodyFat=Number($("bodyFat").value);
+      if(![heightCm,weightKg,bodyFat].every(Number.isFinite)||heightCm<100||heightCm>230||weightKg<30||weightKg>300||bodyFat<2||bodyFat>60){$("error").style.display="block";return}
       $("error").style.display="none";
-      const hm=h/100,fat=w*bf/100,lean=w-fat,ffmi=lean/(hm*hm),norm=ffmi+6.1*(1.8-hm);
-      const level=levels.find(x=>norm<x.max)||levels[levels.length-1],gauge=Math.max(0,Math.min(100,(norm-14)/14*100));
-      $("normalized").textContent=norm.toFixed(1);$("raw").textContent=ffmi.toFixed(1);$("level").textContent=level.label;$("note").innerHTML="<b>"+level.label+"：</b>"+level.note;
-      $("lean").textContent=lean.toFixed(1)+" kg";$("fat").textContent=fat.toFixed(1)+" kg";$("bmi").textContent=(w/(hm*hm)).toFixed(1);
+      const height=heightCm/100,fatMass=weightKg*(bodyFat/100),leanMass=weightKg-fatMass;
+      const ffmi=leanMass/(height*height),normalized=ffmi+6.1*(1.8-height);
+      const level=levels.find(item=>normalized<item.max)||levels[levels.length-1];
+      const gauge=Math.max(0,Math.min(100,((normalized-14)/14)*100));
+      $("normalized").textContent=normalized.toFixed(1);$("raw").textContent=ffmi.toFixed(1);$("level").textContent=level.label;
+      $("note").innerHTML="<strong>"+level.label+"：</strong>"+level.note;
+      $("lean").textContent=leanMass.toFixed(1)+" kg";$("fat").textContent=fatMass.toFixed(1)+" kg";$("bmi").textContent=(weightKg/(height*height)).toFixed(1);
       $("needle").style.left=gauge+"%";$("ring").style.setProperty("--score",gauge*3.6+"deg");
     }
-    $("calculate").addEventListener("click",run);
-    $("reset").addEventListener("click",()=>{$("height").value=175;$("weight").value=75;$("bodyFat").value=15;run()});
-    ["height","weight","bodyFat"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")run()}));
-    run();
+    $("calculate").addEventListener("click",calculate);
+    $("reset").addEventListener("click",()=>{$("height").value="175";$("weight").value="75";$("bodyFat").value="15";$("error").style.display="none";calculate()});
+    ["height","weight","bodyFat"].forEach(id=>$(id).addEventListener("keydown",event=>{if(event.key==="Enter")calculate()}));
+    calculate();
   </script>
 </body>
 </html>
